@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db_data:/var/lib/postgresql/data # Maps a folder to persist data
+
+  dev-container:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dev_env
+    command: sleep infinity  # Keeps the container running
+    volumes:
+      - ./workspace:/workspace  # Maps a folder to persist code
+    tty: true  # Allows interactive shell
+
+volumes:
+  {} # removes named volume definition
