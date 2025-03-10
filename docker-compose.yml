@@ -1,26 +1,50 @@
 version: "3.8"
 services:
-  postgres:
+  database:
     image: postgres:latest
     container_name: postgres_db
     environment:
       POSTGRES_USER: devuser
       POSTGRES_PASSWORD: devpass
       POSTGRES_DB: devdb
+    restart: always
     ports:
       - "5432:5432"
     volumes:
       - ./db_data:/var/lib/postgresql/data # Maps a folder to persist data
 
-  dev-container:
+  backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
-    container_name: dev_env
-    command: sleep infinity  # Keeps the container running
+    container_name: go_backend
+    depends_on:
+      - database
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devpass
+      POSTGRES_DB: devdb
+    ports:
+      - "8080:8080"
     volumes:
-      - ./workspace:/workspace  # Maps a folder to persist code
-    tty: true  # Allows interactive shell
+      - ./backend:/app/src
+    command: ["/app/backend"]
+
+  #frontend:
+  #    build:
+  #      context: ./frontend
+  #      dockerfile: Dockerfile  # Uses frontend's Dockerfile
+  #    container_name: frontend_server
+  #    working_dir: /app
+  #    volumes:
+  #      - ./frontend:/app
+  #    ports:
+  #      - "3000:3000"
+  #    depends_on:
+  #      - backend
+  #    command: npm start
 
 volumes:
-  {} # removes named volume definition
+  db_data:
+  #{} # removes named volume definition

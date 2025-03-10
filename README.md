@@ -25,3 +25,10 @@ To read the contents of the table:
 ```sh
 docker exec -it postgres_db psql -U devuser -d devdb -c "SELECT * FROM logs;"
 ```
+
+I had to initialize the go project before initializing the container from
+> docker-compose up --build -d
+```sh
+go mod init backend
+go mod tidy
+```
