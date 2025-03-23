@@ -31,19 +31,19 @@ services:
       - ./backend:/app/src
     command: ["/app/backend"]
 
-  #frontend:
-  #    build:
-  #      context: ./frontend
-  #      dockerfile: Dockerfile  # Uses frontend's Dockerfile
-  #    container_name: frontend_server
-  #    working_dir: /app
-  #    volumes:
-  #      - ./frontend:/app
-  #    ports:
-  #      - "3000:3000"
-  #    depends_on:
-  #      - backend
-  #    command: npm start
+  frontend:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile  # Uses frontend's Dockerfile
+      container_name: frontend_server
+      working_dir: /app
+      volumes:
+        - ./frontend:/app
+      ports:
+        - "3000:3000"
+      depends_on:
+        - backend
+      command: npm start
 
 volumes:
   db_data:

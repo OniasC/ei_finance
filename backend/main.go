@@ -45,7 +45,8 @@ func initDB() {
 	if err != nil {
 		log.Fatalf("Error connecting to the database: %v", err)
 	}
-	//defer db.Close()
+	//defer db.Close() <<- If i close it here, it will close the connection before the main function ends
+	// I can probably make this function return the db variable and it would be better...
 
 	err = db.Ping()
 	if err != nil {

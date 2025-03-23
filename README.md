@@ -32,3 +32,10 @@ I had to initialize the go project before initializing the container from
 go mod init backend
 go mod tidy
 ```
+
+For the frontend, I had to run the following commands manually before running the docker-compose command to start my containers:
+
+```sh
+npm init -y
+npm install react react-dom
+```
