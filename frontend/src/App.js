@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import ChartWrapper from "./ChartWrapper";
+import { chartData } from "./chartData";
 
 function App() {
   const [logs, setLogs] = useState([]);
@@ -35,6 +37,8 @@ function App() {
   return (
     <div>
       <h1>📜 Log Records</h1>
+      {/* Chart integration */}
+      <ChartWrapper data1={chartData} />
 
       <form onSubmit={handleSubmit}>
         <input
@@ -51,9 +55,7 @@ function App() {
         </select>
         <button type="submit">Add Log</button>
       </form>
-
       <button onClick={fetchLogs}>Refresh Logs</button>
-
       <table border="1">
         <thead>
           <tr>
