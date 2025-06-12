@@ -34,13 +34,38 @@ function App() {
       .catch((err) => console.error("Post error:", err));
   };
 
+  const [selectedSeries, setSelectedSeries] = useState(
+    chartData.tempname.map(() => true)
+  );
+
+  const handleSeriesToggle = (idx) => {
+    setSelectedSeries((prev) =>
+      prev.map((val, i) => (i === idx ? !val : val))
+    );
+  };
+
   return (
     <div>
       <h1>📜 Log Records</h1>
       {/* Chart integration */}
+      <div style={{ marginBottom: "1em" }}>
+        {chartData.tempname.map((s, idx) => (
+          <label key={s.name} style={{ marginRight: "1em" }}>
+            <input
+              type="checkbox"
+              checked={selectedSeries[idx]}
+              onChange={() => handleSeriesToggle(idx)}
+            />
+            {s.name}
+          </label>
+        ))}
+      </div>
+      {/* Chart integration */}
       <div style={{ marginBottom: "4em" }}>
-        <ChartWrapper labels={chartData.labels} series={chartData.tempname} />
-
+        <ChartWrapper
+          labels={chartData.labels}
+          series={chartData.tempname.filter((_, idx) => selectedSeries[idx])}
+        />
       </div>
 
       <form onSubmit={handleSubmit}>
