@@ -1,0 +1,3 @@
+name, value, description, bank, currency, type, date, tags, in/out, category
+"groceries", 50, "Weekly grocery shopping", "aib", "EUR", "expense", "2023-10-01", "food, weekly", "out", "Food"
+"groceries", 50, "Weekly grocery shopping", "aib", "EUR", "expense", "2023-10-01", "food, weekly", "out", "Food"

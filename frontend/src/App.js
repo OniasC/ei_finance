@@ -2,24 +2,64 @@ import React, { useEffect, useState } from "react";
 
 function App() {
   const [logs, setLogs] = useState([]);
+  const [message, setMessage] = useState("");
+  const [level, setLevel] = useState("INFO");
 
-  useEffect(() => {
+  // Fetch logs from backend
+  const fetchLogs = () => {
     fetch("http://localhost:8080/logs")
       .then((res) => res.json())
       .then((data) => setLogs(data))
       .catch((err) => console.error("Fetch error:", err));
+  };
+
+  useEffect(() => {
+    fetchLogs();
   }, []);
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:8080/logs/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, level }),
+    })
+      .then(() => {
+        setMessage(""); // Clear input field
+        fetchLogs(); // Refresh logs
+      })
+      .catch((err) => console.error("Post error:", err));
+  };
 
   return (
     <div>
       <h1>📜 Log Records</h1>
+
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Enter log message"
+          required
+        />
+        <select value={level} onChange={(e) => setLevel(e.target.value)}>
+          <option value="INFO">INFO</option>
+          <option value="WARNING">WARNING</option>
+          <option value="ERROR">ERROR</option>
+        </select>
+        <button type="submit">Add Log</button>
+      </form>
+
+      <button onClick={fetchLogs}>Refresh Logs</button>
+
       <table border="1">
         <thead>
           <tr>
             <th>ID</th>
             <th>Message</th>
             <th>Level</th>
-            <th>Timestamp</th>
           </tr>
         </thead>
         <tbody>
@@ -28,7 +68,6 @@ function App() {
               <td>{log.id}</td>
               <td>{log.message}</td>
               <td>{log.level}</td>
-              <td>{log.created_at}</td>
             </tr>
           ))}
         </tbody>

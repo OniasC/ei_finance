@@ -1,5 +1,5 @@
 # Start with Ubuntu base image
-FROM ubuntu:latest
+FROM ubuntu:22.04
 
 # Set environment variables
 ENV GO_VERSION=1.23.2
@@ -9,7 +9,12 @@ RUN apt-get update && apt-get install -y \
     curl \
     git \
     build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    python3 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/* \
+    && python3 -m pip install --upgrade pip
+
+RUN python3 -m pip install numpy pandas
 
 # Download and install Go
 RUN curl -OL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
@@ -19,6 +24,16 @@ RUN curl -OL https://go.dev/dl/go${GO_VERSION}.linux-amd64.tar.gz \
 # Set Go environment variables
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOPATH="/go"
+
+# Install Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Optionally, create and build a Rust Hello World
+WORKDIR /app/rust-hello
+RUN /root/.cargo/bin/cargo new --bin hello
+WORKDIR /app/rust-hello/hello
+RUN /root/.cargo/bin/cargo build --release
 
 # Create app directory
 WORKDIR /app/src
