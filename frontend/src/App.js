@@ -38,7 +38,10 @@ function App() {
     <div>
       <h1>📜 Log Records</h1>
       {/* Chart integration */}
-      <ChartWrapper data1={chartData} />
+      <div style={{ marginBottom: "4em" }}>
+        <ChartWrapper labels={chartData.labels} series={chartData.tempname} />
+
+      </div>
 
       <form onSubmit={handleSubmit}>
         <input

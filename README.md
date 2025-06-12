@@ -39,3 +39,6 @@ For the frontend, I had to run the following commands manually before running th
 npm init -y
 npm install react react-dom
 ```
+
+#### Small notes:
+On frontend, version compatibility might be a problem. I've had to delete manually node_modules and also rerun npm install locally so it is transfered back to the docker container during the deployment phase.
