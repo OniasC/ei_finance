@@ -1,53 +1,63 @@
 import React from "react";
 import {
-  BarChart,
-  Bar,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  ResponsiveContainer,
-  ComposedChart,
-  Brush
-} from "recharts";
+  VictoryChart,
+  VictoryLine,
+  VictoryAxis,
+  VictoryLegend,
+  VictoryTheme,
+  VictoryTooltip,
+  VictoryZoomContainer // <-- import this
+} from "victory";
 
 export default function ChartWrapper({ labels, series }) {
-  // Build chart data for Recharts
-  const chartData = labels.map((label, i) => {
-    const point = { name: label };
-    series.forEach(s => {
-      point[s.name] = s.values[i];
-    });
-    return point;
-  });
+  // Transform data for Victory
+  const victorySeries = series.map(s => ({
+    name: s.name,
+    color: s.color,
+    data: labels.map((label, i) => ({
+      x: label,
+      y: s.values[i]
+    }))
+  }));
 
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", height: 350 }}>
       <h2>Monthly Values</h2>
-      <ResponsiveContainer>
-        <ComposedChart data={chartData}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          {series.map((s, idx) =>
-            s.type === "bar" ? (
-              <Bar key={s.name} dataKey={s.name} fill={s.color || "#4e79a7"} />
-            ) : (
-              <Line
-                key={s.name}
-                type="monotone"
-                dataKey={s.name}
-                stroke={s.color || "#e15759"}
-                strokeWidth={2}
-                dot
-              />
-            )
-          )}
-          <Brush dataKey="name" height={20} stroke="#8884d8" />
-        </ComposedChart>
-      </ResponsiveContainer>
+      <VictoryChart
+        theme={VictoryTheme.material}
+        domainPadding={20}
+        height={300}
+        width={600}
+        containerComponent={
+          <VictoryZoomContainer
+            zoomDimension="x"
+            allowZoom={true}
+            allowPan={true}
+          />
+        }
+      >
+        <VictoryAxis />
+        <VictoryAxis dependentAxis />
+        {victorySeries.map((s, idx) => (
+          <VictoryLine
+            key={s.name}
+            data={s.data}
+            style={{
+              data: { stroke: s.color || "#4e79a7", strokeWidth: 2 }
+            }}
+          />
+        ))}
+        <VictoryLegend
+          x={100}
+          y={10}
+          orientation="horizontal"
+          gutter={20}
+          data={victorySeries.map(s => ({
+            name: s.name,
+            symbol: { fill: s.color || "#4e79a7" }
+          }))}
+        />
+      </VictoryChart>
     </div>
   );
 }
