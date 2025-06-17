@@ -28,6 +28,8 @@ type Log struct {
 	Level   string `json:"level"`
 }
 
+type Rule map[string]interface{}
+
 func initDB() {
 	dbUser := os.Getenv("POSTGRES_USER")
 	dbPassword := os.Getenv("POSTGRES_PASSWORD")
@@ -76,6 +78,7 @@ func main() {
 	// Create API route to fetch data
 	http.HandleFunc("/logs", getLogsHandler)
 	http.HandleFunc("/logs/add", addLogHandler)
+	http.HandleFunc("/rules", getRulesHandler)
 
 	// Define HTTP handler
 	//http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -195,4 +198,45 @@ func getLogs() ([]Log, error) {
 	}
 	return logs, nil
 
+}
+
+func getRulesHandler(w http.ResponseWriter, r *http.Request) {
+	rows, err := db.Query("SELECT * FROM rules;")
+	if err != nil {
+		http.Error(w, "Failed to retrieve rules", http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	columns, err := rows.Columns()
+	if err != nil {
+		http.Error(w, "Failed to get columns", http.StatusInternalServerError)
+		return
+	}
+
+	var rules []Rule
+	for rows.Next() {
+		columnsVals := make([]interface{}, len(columns))
+		columnsPtrs := make([]interface{}, len(columns))
+		for i := range columnsVals {
+			columnsPtrs[i] = &columnsVals[i]
+		}
+		if err := rows.Scan(columnsPtrs...); err != nil {
+			http.Error(w, "Failed to scan row", http.StatusInternalServerError)
+			return
+		}
+		rowMap := make(Rule)
+		for i, colName := range columns {
+			val := columnsVals[i]
+			if b, ok := val.([]byte); ok {
+				rowMap[colName] = string(b)
+			} else {
+				rowMap[colName] = val
+			}
+		}
+		rules = append(rules, rowMap)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(rules)
 }
