@@ -1,0 +1,5 @@
+name,date,currency,amount,account,description,category,tags,recurring,frequency,inout,id
+John Doe,2023-01-15,USD,1500.0,Bank A,Salary for January,Category.SMALL,salary,False,,in,John Doe_2023-01-15_1500.0_USD
+Groceries,2023-10-01,USD,150.0,Bank of America,Weekly grocery shopping,Category.MEDIUM,"groceries,food",False,,out,Groceries_2023-10-01_150.0_USD
+Groceries,2023-10-02,USD,150.0,Bank of America,Weekly grocery shopping,Category.MEDIUM,"groceries,food",False,,out,Groceries_2023-10-02_150.0_USD
+Groceries,2023-10-03,USD,150.0,jorge,Weekly grocery shopping,Category.LARGE,"groceries,food",False,,out,Groceries_2023-10-03_150.0_USD

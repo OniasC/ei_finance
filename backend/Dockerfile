@@ -42,6 +42,8 @@ WORKDIR /app/src
 COPY go.mod go.sum ./
 RUN /usr/local/go/bin/go mod download
 
+RUN go get github.com/rs/cors
+
 # Copy the entire source code
 COPY . .
 
