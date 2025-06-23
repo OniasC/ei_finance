@@ -11,6 +11,8 @@ import (
 	"os"
 
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
+	_ "github.com/rs/cors"
 )
 
 var db *sql.DB
@@ -89,7 +91,15 @@ func main() {
 	port := ":8080"
 	log.Println("Backend running on http://localhost" + port)
 	log.Println("Starting Go server on port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+
+	handler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedMethods:   []string{"GET", "POST", "OPTIONS", "FETCH"},
+		AllowedHeaders:   []string{"Content-Type"},
+		AllowCredentials: true,
+	}).Handler(http.DefaultServeMux)
+
+	log.Fatal(http.ListenAndServe(":8080", handler))
 }
 
 func getLogsHandler(w http.ResponseWriter, r *http.Request) {

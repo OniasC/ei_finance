@@ -1,0 +1,2 @@
+name, date, currency, amount, bank, description, category, tags, recurring, frequency, inout,
+"John Doe", "2023-01-15", "USD", 1500, "Bank A", "Salary for January", "Income", "salary", "no", "", "in",
