@@ -1,7 +1,8 @@
 from enum import Enum
 
 class Category(Enum):
-    SMALL = 1
-    MEDIUM = 2
-    LARGE = 3
-    INCOME = 4
+    BASIC = 1
+    SMALL = 2
+    MEDIUM = 3
+    LARGE = 4
+    INCOME = 5

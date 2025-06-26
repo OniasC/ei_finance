@@ -20,7 +20,6 @@ class Account():
         self.description = description
         self.balance: Dict[str, float] = {}
 
-
     def deposit(self, date: str, amount: float):
         self.balance[date] = self.balance.get(date, 0) + amount
 

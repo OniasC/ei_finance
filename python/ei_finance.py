@@ -105,7 +105,7 @@ class EiFinance:
             if expense.account not in expenses_per_bank:
                 expenses_per_bank[expense.account] = {}
             expenses_per_bank[expense.account][expense.date] = expense.amount
-        
+
         self.expenses_per_bank = expenses_per_bank
 
     def plot_accounts(self, currency: str = 'USD'):
@@ -146,3 +146,32 @@ class EiFinance:
                 else:
                     # If the opening date is today or in the future, just set the balance to initial balance
                     account.balance[str(date.date())] = account.initial_balance
+
+    def plot_currency_calendar(self, currency: str = 'USD'):
+        """Plot the balance of each account over time for a specific currency."""
+        import matplotlib.pyplot as plt
+
+        for account in self.accounts:
+            if getattr(account, 'currency', None) == currency:
+                dates = list(account.balance.keys())
+                balances = list(account.balance.values())
+
+                plt.plot(dates, balances, marker='o', label=account.name)
+
+        plt.title(f'Account Balances Over Time ({currency})')
+        plt.xlabel('Date')
+        plt.ylabel('Balance')
+        plt.xticks(rotation=45)
+        plt.legend()
+        plt.grid()
+        plt.tight_layout()
+        plt.show()
+
+    def add_expense2expenses(self, new_expenses: List[Transaction]):
+        for expense in new_expenses:
+            # Check if the expense already exists in the existing expenses
+            if not any(existing_expense.id == expense.id for existing_expense in self.expenses):
+                self.expenses.append(expense)
+            else:
+                print(f"Transaction with ID {expense.id} already exists. Skipping.")
+        self.get_expenses_per_bank()

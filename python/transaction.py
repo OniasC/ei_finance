@@ -3,8 +3,6 @@ from typing import List, Dict
 from typing import Optional, Union, Any
 
 class Transaction:
-
-
     def __init__(self, name: Optional[str] = None,
                  date: Optional[str] = None,
                  currency: Optional[str] = None,
@@ -41,7 +39,7 @@ class Transaction:
 
         if name is None or date is None or amount == 0.0 or inout is None:
             raise ValueError("Name, date, amount, and inout are required fields.")
-        if id is not None:
+        if id is not None and id != "" and str(id).lower() != "nan":
             self.id = id
         else:
             self.id = self.create_id()
