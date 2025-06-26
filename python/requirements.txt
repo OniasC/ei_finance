@@ -7,3 +7,5 @@ seaborn==0.11.2
 statsmodels==0.13.2
 pyspellchecker==0.6.2
 mplcursors==0.5.3
+flask==3.0.3
+flask_cors==5.0.0
