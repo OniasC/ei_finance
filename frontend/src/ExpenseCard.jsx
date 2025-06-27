@@ -11,17 +11,9 @@ function ExpenseCard() {
   }, []);
 
   return (
-    <div style={{
-      border: "1px solid #ccc",
-      borderRadius: "10px",
-      padding: "20px",
-      width: "300px",
-      boxShadow: "0 0 10px rgba(0,0,0,0.1)"
-    }}>
-      <h3>Total Expenses</h3>
-      <p style={{ fontSize: "24px", color: "#2c3e50" }}>
-        {total !== null ? `$${total.toFixed(2)}` : "Loading..."}
-      </p>
+    <div className="card">
+        <h4>Card 1</h4>
+        <p>{total !== null ? `$${total.toFixed(2)}` : "Loading..."}</p>
     </div>
   );
 }
