@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import TagInput from "./TagInput";
 
 function ExpenseForm() {
   const today = new Date().toISOString().slice(0, 10);
@@ -25,10 +26,22 @@ function ExpenseForm() {
   useEffect(() => {
     fetch("http://localhost:5000/options/currency")
       .then((res) => res.json())
-      .then(setCurrencyOptions);
+      .then((options) => {
+        setCurrencyOptions(options);
+        setForm((prev) => ({
+          ...prev,
+          currency: prev.currency || options[0] || "",
+        }));
+      });
     fetch("http://localhost:5000/options/account")
       .then((res) => res.json())
-      .then(setAccountOptions);
+      .then((options) => {
+        setAccountOptions(options);
+        setForm((prev) => ({
+          ...prev,
+          account: prev.account || options[0] || "",
+        }));
+      });
     fetch("http://localhost:5000/options/category")
       .then((res) => res.json())
       .then(setCategoryOptions);
@@ -57,6 +70,17 @@ function ExpenseForm() {
       const data = await res.json();
       if (res.ok) {
         setMessage("Success: " + data.message);
+        setForm((prev) => ({
+            ...prev,
+            name: "",
+            date: today,
+            amount: "",
+            description: "",
+            category: "",
+            tags: "",
+            recurring: false,
+            frequency: "",
+        }));
       } else {
         setMessage("Error: " + data.error);
       }
@@ -157,18 +181,11 @@ function ExpenseForm() {
       {/* Tags */}
       <label>
         Tags:
-        <input
-          name="tags"
-          value={form.tags}
-          onChange={handleChange}
-          list="tag-options"
-          placeholder="Add tags, comma separated"
+        <TagInput
+            value={form.tags}
+            onChange={(tags) => setForm((prev) => ({ ...prev, tags }))}
+            fetchUrl="http://localhost:5000/options/tags"
         />
-        <datalist id="tag-options">
-          {tagOptions.map((opt) => (
-            <option key={opt} value={opt} />
-          ))}
-        </datalist>
       </label>
 
       {/* Recurring and Frequency */}
