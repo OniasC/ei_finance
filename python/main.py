@@ -16,6 +16,21 @@ def get_total_expenses():
     total = 1234.57  # Example value, from DB or calculation
     return jsonify({"total_expenses": total})
 
+@app.route('/expense', methods=['POST'])
+def add_expense():
+    data = request.get_json()
+    print(data)
+    try:
+        # Validate and process data here
+        # For example, write to CSV or database
+        # If something goes wrong, raise an Exception
+        if data['name'] == '':
+            #raise ValueError("Expense name cannot be empty")
+            return jsonify({"error": "data cant be empty"}), 400
+        return jsonify({"message": "Expense added successfully!"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 # Simulated full data
 full_x = list(range(1000))
 full_y = [x**0.5 for x in full_x]

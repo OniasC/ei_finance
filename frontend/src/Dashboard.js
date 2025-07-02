@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import "./Dashboard.css";
 import ExpenseCard from "./ExpenseCard"; // Adjust path if needed
+import ExpenseForm  from "./ExpenseForm";
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
@@ -113,17 +114,7 @@ const Dashboard = () => {
         {/* Form Section */}
         <div className="form-section">
           <h3>Enter Expense Data</h3>
-          <form>
-            <label>
-              Description:
-              <input type="text" name="description" />
-            </label>
-            <label>
-              Amount:
-              <input type="number" name="amount" />
-            </label>
-            <button type="submit">Submit</button>
-          </form>
+          <ExpenseForm />
         </div>
       </div>
     </div>
