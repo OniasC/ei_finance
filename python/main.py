@@ -31,6 +31,22 @@ def add_expense():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@app.route('/options/currency')
+def get_currency_options():
+    return jsonify(["USD", "EUR", "GBP"])
+
+@app.route('/options/account')
+def get_account_options():
+    return jsonify(["Bank A", "Bank of America", "jorge"])
+
+@app.route('/options/category')
+def get_category_options():
+    return jsonify(["Food", "Salary", "Groceries", "Other"])
+
+@app.route('/options/tags')
+def get_tag_options():
+    return jsonify(["groceries", "food", "salary"])
+
 # Simulated full data
 full_x = list(range(1000))
 full_y = [x**0.5 for x in full_x]

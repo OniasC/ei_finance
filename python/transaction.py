@@ -3,17 +3,17 @@ from typing import List, Dict
 from typing import Optional, Union, Any
 
 class Transaction:
-    def __init__(self, name: Optional[str] = None,
-                 date: Optional[str] = None,
-                 currency: Optional[str] = None,
-                 amount: float = 0.0,
+    def __init__(self, name: str,
+                 date: str,
+                 inout: str,
+                 amount: float,
+                 currency: str,
                  account: Optional[str] = None,
                  description: Optional[str] = None,
                  category: Optional[Union[Category, str]] = None,
                  tags: Optional[List[str]] = None,
                  recurring: bool = False,
                  frequency: Optional[str] = None,
-                 inout: Optional[str] = None,
                  id: Optional[str] = None):
         self.name = name
         self.date = date
